@@ -1,0 +1,24 @@
+name: Import BGG Top 1000 Games
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'  # co poniedziałek o 6:00 UTC
+  workflow_dispatch:      # pozwala uruchomić ręcznie z GitHub UI
+
+jobs:
+  fetch-bgg-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install csv-parse node-fetch unzipper
+
+      - name: Run BGG import script
+        run: node scripts/bgg_import.js
